@@ -87,6 +87,10 @@ if env['platform'] == 'osx':
         env.OSXRename(None, dylib)
 
 env.Append(LIBPATH=[output_path])
+env.Append(LIBS=['ws2_32'])
+env.Append(LIBS=['wsock32'])
+env.Append(LIBS=['bcrypt'])
+env.Append(LIBS=['pthread'])
 env.Append(LIBS=['avformat'])
 env.Append(LIBS=['avcodec'])
 env.Append(LIBS=['avutil'])
