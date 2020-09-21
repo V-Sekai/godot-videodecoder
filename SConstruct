@@ -35,7 +35,7 @@ if env['platform'] == 'x11':
     env.Append(RPATH=env.Literal('\$$ORIGIN'))
     # statically link glibc
     env.Append(LIBS=[File('/usr/lib/x86_64-linux-gnu/libc_nonshared.a')])
-    env.Prepend(CCFLAGS=["-fPIC"])
+    env.Prepend(CCFLAGS=["-static"])
 
 
 env.Append(CPPPATH=['#' + include_path + '/'])
