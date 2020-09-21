@@ -10,8 +10,6 @@
 # (from within your project where this is a submodule installed at ./contrib/godot-videodecoder/build_gdnative.sh/)
 
 # The Dockerfile will run a container to compile everything:
-# http://docs.godotengine.org/en/3.2/development/compiling/compiling_for_x11.html
-# http://docs.godotengine.org/en/3.2/development/compiling/compiling_for_windows.html#cross-compiling-for-windows-from-other-operating-systems
 # http://docs.godotengine.org/en/3.2/development/compiling/compiling_for_osx.html#cross-compiling-for-macos-from-linux
 
 DIR="$(cd $(dirname "$0") && pwd)"
@@ -47,33 +45,17 @@ fi
 
 set -e
 # ideally we'd run these at the same time but ... https://github.com/moby/moby/issues/2776
-docker build ./ -f Dockerfile.ubuntu-xenial -t "godot-videodecoder-ubuntu-xenial"
 docker build ./ -f Dockerfile.ubuntu-bionic -t "godot-videodecoder-ubuntu-bionic" \
     --build-arg XCODE_SDK=$XCODE_SDK
 
-# bionic is for cross compiles, use xenial for linux
-# (for ubuntu 16 compatibility even though it's outdated already)
 docker build ./ -f Dockerfile.osx --build-arg JOBS=$JOBS -t "godot-videodecoder-osx"
-docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
-docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
 
 set -x
 # precreate the target directory because otherwise
 # docker cp will copy x11/* -> $ADDON_BIN_DIR/* instead of x11/* -> $ADDON_BIN_DIR/x11/*
 mkdir -p $ADDON_BIN_DIR/
 
-echo "extracting $ADDON_BIN_DIR/x11"
-id=$(docker create godot-videodecoder-x11)
-docker cp $id:/opt/target/x11 $ADDON_BIN_DIR/
-docker rm -v $id
-
 echo "extracting $ADDON_BIN_DIR/osx"
 id=$(docker create godot-videodecoder-osx)
 docker cp $id:/opt/target/osx $ADDON_BIN_DIR/
 docker rm -v $id
-
-echo "extracting $ADDON_BIN_DIR/wi64"
-id=$(docker create godot-videodecoder-win64)
-docker cp $id:/opt/target/win64 $ADDON_BIN_DIR/
-docker rm -v $id
-
