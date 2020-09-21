@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 #build environment for ubuntu with older glibc
 ENV DEBIAN_FRONTEND=noninteractive
