@@ -44,11 +44,8 @@ if [ ! "$XCODE_SDK" = "$XCODE_SDK_FOR_COPY" ]; then
 fi
 
 set -e
-# ideally we'd run these at the same time but ... https://github.com/moby/moby/issues/2776
-docker build ./ -f Dockerfile.ubuntu-bionic -t "godot-videodecoder-ubuntu-bionic" \
+docker build ./ -f Dockerfile.osx --build-arg JOBS=$JOBS -t "godot-videodecoder-osx" \
     --build-arg XCODE_SDK=$XCODE_SDK
-
-docker build ./ -f Dockerfile.osx --build-arg JOBS=$JOBS -t "godot-videodecoder-osx"
 
 set -x
 # precreate the target directory because otherwise
