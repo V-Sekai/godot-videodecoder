@@ -42,8 +42,6 @@ RUN apt install -y autoconf \
 
 RUN apt install -y ocl-icd-opencl-dev
 
-FROM godot-videodecoder-ubuntu-bionic:latest
-
 WORKDIR /opt/godot-videodecoder/ffmpeg-static
 COPY ./ffmpeg-static .
 
