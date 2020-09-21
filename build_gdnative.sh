@@ -39,6 +39,6 @@ set -e
 docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
 echo "extracting $ADDON_BIN_DIR/win64"
 id=$(docker create godot-videodecoder-win64)
-docker cp $id:/opt/target $ADDON_BIN_DIR/
+docker cp $id:/opt/target/. $ADDON_BIN_DIR/
 docker rm -v $id
 
