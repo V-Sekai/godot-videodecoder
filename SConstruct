@@ -87,15 +87,22 @@ if env['platform'] == 'osx':
         env.OSXRename(None, dylib)
 
 env.Append(LIBPATH=[output_path])
-env.Append(LIBS=['ws2_32'])
-env.Append(LIBS=['wsock32'])
-env.Append(LIBS=['bcrypt'])
-env.Append(LIBS=['pthread'])
+env.Append(LIBPATH=['ffmpeg-static/target/lib'])
 env.Append(LIBS=['avformat'])
 env.Append(LIBS=['avcodec'])
+env.Append(LIBS=['opus'])
+env.Append(LIBS=['vorbis'])
+env.Append(LIBS=['ogg'])
 env.Append(LIBS=['avutil'])
 env.Append(LIBS=['swscale'])
 env.Append(LIBS=['swresample'])
+
+if env['platform'].startswith('win') and tool_prefix:
+    env.Append(LIBS=['mingw32'])
+    env.Append(LIBS=['wsock32'])
+    env.Append(LIBS=['ws2_32'])
+    env.Append(LIBS=['bcrypt'])
+    env.Append(LIBS=['pthread'])
 
 sources = list(map(lambda x: '#'+x, glob('src/*.c')))
 
