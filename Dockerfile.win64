@@ -38,6 +38,7 @@ RUN apt install -y autoconf \
   pkg-config \
   texi2html \
   zlib1g-dev \
+  gcc-mingw-w64 \
   mingw-w64-tools \
   wget
 
