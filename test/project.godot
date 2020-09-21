@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [gdnative]
 
 singletons=[ "res://addons/videodecoder.gdnlib" ]
+singletons_disabled=[  ]
 
 [input]
 
