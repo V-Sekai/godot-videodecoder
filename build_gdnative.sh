@@ -28,17 +28,17 @@ mkdir -p $ADDON_BIN_DIR/
 
 set -e
 # # use xenial for linux
-# # (for ubuntu 16 compatibility even though it's outdated already)
-# docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
-# echo "extracting $ADDON_BIN_DIR/x11"
-# id=$(docker create godot-videodecoder-x11)
-# docker cp $id:/opt/target/x11 $ADDON_BIN_DIR/
-# docker rm -v $id
+# (for ubuntu 16 compatibility even though it's outdated already)
+docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
+echo "extracting $ADDON_BIN_DIR/x11"
+id=$(docker create godot-videodecoder-x11)
+docker cp $id:/opt/target/x11 $ADDON_BIN_DIR/
+docker rm -v $id
 
 # focal is for cross compiles
 docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
 echo "extracting $ADDON_BIN_DIR/win64"
 id=$(docker create godot-videodecoder-win64)
-docker cp $id:/opt/target/. $ADDON_BIN_DIR/
+docker cp $id:/opt/target/win64 $ADDON_BIN_DIR/
 docker rm -v $id
 
