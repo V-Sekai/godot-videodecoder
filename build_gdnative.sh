@@ -21,25 +21,21 @@ else
 fi
 echo "Using JOBS=$JOBS"
 
-set -e
-# ideally we'd run these at the same time but ... https://github.com/moby/moby/issues/2776
-docker build ./ -f Dockerfile.ubuntu-xenial -t "godot-videodecoder-ubuntu-xenial"
-
-# bionic is for cross compiles, use xenial for linux
-# (for ubuntu 16 compatibility even though it's outdated already)
-docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
-docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
-
 set -x
 # precreate the target directory because otherwise
 # docker cp will copy x11/* -> $ADDON_BIN_DIR/* instead of x11/* -> $ADDON_BIN_DIR/x11/*
 mkdir -p $ADDON_BIN_DIR/
 
+set -e
+# bionic is for cross compiles, use xenial for linux
+# (for ubuntu 16 compatibility even though it's outdated already)
+docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
 echo "extracting $ADDON_BIN_DIR/x11"
 id=$(docker create godot-videodecoder-x11)
 docker cp $id:/opt/target/x11 $ADDON_BIN_DIR/
 docker rm -v $id
 
+docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
 echo "extracting $ADDON_BIN_DIR/win64"
 id=$(docker create godot-videodecoder-win64)
 docker cp $id:/opt/target/win64 $ADDON_BIN_DIR/
