@@ -8,6 +8,7 @@
 # http://docs.godotengine.org/en/3.2/development/compiling/compiling_for_windows.html#cross-compiling-for-windows-from-other-operating-systems
 
 DIR="$(cd $(dirname "$0") && pwd)"
+DOCKER="$(which podman || which docker)"
 ADDON_BIN_DIR=${ADDON_BIN_DIR:-$DIR/target}
 JOBS=${JOBS:-4}
 if [ -f /proc/cpuinfo ]; then
@@ -29,16 +30,16 @@ mkdir -p $ADDON_BIN_DIR/
 set -e
 # # use xenial for linux
 # (for ubuntu 16 compatibility even though it's outdated already)
-docker build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
+$DOCKER build ./ -f Dockerfile.x11 --build-arg JOBS=$JOBS -t "godot-videodecoder-x11"
 echo "extracting $ADDON_BIN_DIR/x11"
-id=$(docker create godot-videodecoder-x11)
-docker cp $id:/opt/target/x11 $ADDON_BIN_DIR/
-docker rm -v $id
+id=$($DOCKER create godot-videodecoder-x11)
+$DOCKER cp $id:/opt/target/x11 $ADDON_BIN_DIR/
+$DOCKER rm -v $id
 
 # focal is for cross compiles
-docker build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
+$DOCKER build ./ -f Dockerfile.win64 --build-arg JOBS=$JOBS -t "godot-videodecoder-win64"
 echo "extracting $ADDON_BIN_DIR/win64"
 id=$(docker create godot-videodecoder-win64)
-docker cp $id:/opt/target/win64 $ADDON_BIN_DIR/
-docker rm -v $id
+$DOCKER cp $id:/opt/target/win64 $ADDON_BIN_DIR/
+$DOCKER rm -v $id
 
